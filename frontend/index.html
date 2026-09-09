@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="GARUDA-ID document screening prototype" />
+    <title>GARUDA-ID | Screening Console</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css?v=4" />
+  </head>
+  <body>
+    <div class="notice-bar">Privacy-first document screening · Local prototype · No images stored on-chain</div>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="GARUDA-ID home">
+        <span class="brand-mark">G</span>
+        <span>GARUDA-ID <small>TRUSTED DOCUMENT SCREENING</small></span>
+      </a>
+      <nav class="topnav" aria-label="Page sections">
+        <a href="#capture">Capture</a>
+        <a href="#evidence">Evidence</a>
+        <a href="#audit">Audit proof</a>
+      </nav>
+      <a class="environment" id="blockchain-status" href="/api/blockchain-status" target="_blank" rel="noreferrer"><span></span><b>Checking local chain…</b></a>
+    </header>
+
+    <main id="top" class="shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Officer screening workspace</p>
+          <h1>Clear captures.<br /><em>Confident review.</em></h1>
+          <p>Check document quality, validate passport MRZ data, and create a privacy-safe blockchain audit proof in one focused flow.</p>
+          <div class="assurance-row" aria-label="System capabilities">
+            <span><b>01</b> Quality gate</span>
+            <span><b>02</b> MRZ checks</span>
+            <span><b>03</b> Audit proof</span>
+          </div>
+        </div>
+        <aside class="hero-note">
+          <span class="note-mark">✓</span>
+          <div><strong>Two clear outcomes</strong><p>Every scan resolves to READY or RECAPTURE—nothing ambiguous.</p></div>
+        </aside>
+      </section>
+
+      <section class="section-heading">
+        <div><p class="eyebrow">Screening workflow</p><h2>Review a document capture</h2></div>
+        <p>Use a clear, evenly lit image of the passport biodata page with both MRZ lines visible.</p>
+      </section>
+
+      <section class="workspace" aria-label="Document analysis workspace">
+        <div class="card upload-card" id="capture">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Step 01</p>
+              <h2>Capture document</h2>
+            </div>
+            <span class="status-chip">Input</span>
+          </div>
+
+          <label class="dropzone" id="dropzone" for="file-input">
+            <input id="file-input" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+            <span class="upload-icon">↥</span>
+            <strong>Add passport biodata page</strong>
+            <span>Drop here or browse · PNG, JPG, WEBP · max 10 MB</span>
+          </label>
+
+          <div class="demo-picker" id="demo-picker">
+            <span>Demo inputs</span>
+            <button type="button" data-demo="demo-assets/clear-ready.png">Clear → READY</button>
+            <button type="button" data-demo="demo-assets/blurred-dark-recapture.jpg">Blurry/dark → RECAPTURE</button>
+          </div>
+
+          <div class="preview-wrap" id="preview-wrap" hidden>
+            <img id="document-preview" alt="Uploaded document preview" />
+            <button id="remove-file" class="text-button" type="button">Choose a different image</button>
+          </div>
+
+          <button id="analyze-button" class="primary-button" type="button" disabled>
+            Analyze document <span>→</span>
+          </button>
+          <p id="analysis-status" class="analysis-status" role="status" hidden></p>
+          <p class="helper-text"><span>ⓘ</span> Use only synthetic or authorized test documents in this prototype.</p>
+        </div>
+
+        <div class="card analysis-card" id="evidence" aria-live="polite">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Step 02</p>
+              <h2>Evidence report</h2>
+            </div>
+            <span id="risk-badge" class="risk-badge neutral">Awaiting scan</span>
+          </div>
+
+          <div id="empty-state" class="empty-state">
+            <span class="empty-icon">◎</span>
+            <strong>Evidence report awaiting capture</strong>
+            <p>Quality, MRZ, and decision details will appear here after analysis.</p>
+          </div>
+
+          <div id="results" hidden>
+            <div class="score-panel">
+              <div>
+                <span class="label">Capture decision</span>
+                <strong id="risk-score">--</strong>
+              </div>
+              <p id="risk-summary">No evidence processed yet.</p>
+              <div class="validation-score">
+                <div><span class="label">Validation score</span><strong id="validation-score">--</strong><small>/100</small></div>
+                <div class="score-track" role="progressbar" aria-label="Validation score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="score-fill"></span></div>
+              </div>
+            </div>
+
+            <div class="results-grid">
+              <section>
+                <h3>Document fields</h3>
+                <dl id="document-fields" class="field-list"></dl>
+              </section>
+              <section>
+                <h3>Validation checks</h3>
+                <ul id="validation-list" class="check-list"></ul>
+              </section>
+            </div>
+
+            <section class="reasons-section">
+              <h3>Reasons & evidence</h3>
+              <ul id="reason-list" class="reason-list"></ul>
+            </section>
+
+            <section id="recapture-prompt" class="recapture-prompt" hidden>
+              <div>
+                <span class="recapture-kicker">New capture required</span>
+                <h3>This image needs another try.</h3>
+                <p id="recapture-copy">Use brighter light, hold the camera steady, and keep the entire biodata page in frame.</p>
+              </div>
+              <button id="recapture-button" type="button">Choose another image <span>→</span></button>
+            </section>
+
+            <section class="audit-section" id="audit">
+              <div>
+                <h3>Blockchain audit proof</h3>
+                <p>Records only the report hash, status, and timestamp - never the uploaded image.</p>
+              </div>
+              <button id="audit-button" class="audit-button" type="button">Record audit proof</button>
+              <p id="audit-status" class="audit-status" role="status" hidden></p>
+              <dl id="audit-proof" class="audit-proof" hidden></dl>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>GARUDA-ID prototype · Capture-quality gate only · Officer review remains required for every decision.</footer>
+    <script src="app.js"></script>
+  </body>
+</html>

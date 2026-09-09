@@ -1,0 +1,29 @@
+# Credentials and local configuration. Commit only the safe template.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Python environments and generated files
+.venv/
+.uv-cache/
+.uv-python/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+
+# JavaScript / Hardhat generated files
+blockchain/node_modules/
+blockchain/.npm-cache/
+blockchain/artifacts/
+blockchain/cache/
+blockchain/.hardhat-runtime/
+
+# Local logs and editor/OS metadata
+*.log
+.DS_Store
+Thumbs.db
