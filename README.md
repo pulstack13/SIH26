@@ -92,25 +92,4 @@ Restart the API after editing `.env`. Upload an image, complete the quality chec
 3. Remove the image, choose **Blurry/dark → RECAPTURE**, and analyze it. Show the failed checks and recapture guidance.
 4. End on the privacy note: images and document fields are never written on-chain; only the evidence hash, decision, and timestamp are recorded.
 
-## Publish to GitHub
 
-No Git commit has been created for this project, so no author has been added. Set your own Git identity before making the first commit (use the email connected to your GitHub account):
-
-```powershell
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"
-```
-
-Create an empty repository on GitHub **without** adding a README, `.gitignore`, or license. Then, from this project folder, run the following and replace the repository URL:
-
-```powershell
-git init
-git branch -M main
-git add .
-git status
-git commit -m "Initial commit"
-git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPOSITORY.git
-git push -u origin main
-```
-
-Review the `git status` output before `git commit`. It must not list `.env`, private keys, or local logs. GitHub will ask you to sign in or provide a personal access token when pushing over HTTPS.
