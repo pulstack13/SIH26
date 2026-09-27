@@ -150,7 +150,10 @@ async function refreshWatchlistStatus() {
     const data = await res.json();
     const el = document.querySelector('#watchlist-status');
     if (el) el.textContent = `Watchlist DB: ${data.entries || 0} demo entries loaded (${data.seen_ids || 0} IDs seen this session). Edit backend/data/watchlist.json to update. Test blacklist with Aadhaar 2000 0041 3739.`;
-  } catch { /* offline — ignore */ }
+  } catch {
+    const el = document.querySelector('#watchlist-status');
+    if (el) el.textContent = 'Watchlist DB: API unreachable — check GARUDA_API_BASE / backend status.';
+  }
 }
 refreshWatchlistStatus();
 
@@ -246,12 +249,17 @@ async function runAnalysis(file) {
     });
     if (!response.ok) {
       const body = await response.json().catch(() => ({}));
-      throw new Error(body.detail || 'Analysis could not be completed.');
+      throw new Error(body.detail || `Analysis failed (HTTP ${response.status}).`);
     }
     return response.json();
   } catch (error) {
     if (error.name === 'AbortError') {
       throw new Error('Analysis timed out after 90 seconds. Restart the API and try a smaller, clear image.');
+    }
+    if (error instanceof TypeError) {
+      // Network-level failure: wrong API URL, backend asleep/down, or CORS.
+      const where = API_BASE || 'same origin (no API configured)';
+      throw new Error(`Cannot reach API at ${where}. Check GARUDA_API_BASE, backend status (/health), and redeploy.`);
     }
     throw error;
   } finally {
@@ -486,7 +494,10 @@ async function refreshFaceStatus() {
     const data = await res.json();
     const el = document.querySelector('#face-engine-status');
     if (el) el.textContent = `Face engines: matcher ${data.active_matcher}, detector ${data.active_detector}. ${data.note || ''}`;
-  } catch { /* offline — ignore */ }
+  } catch {
+    const el = document.querySelector('#face-engine-status');
+    if (el) el.textContent = 'Face engines: API unreachable — check GARUDA_API_BASE / backend status.';
+  }
 }
 refreshFaceStatus();
 const faceCameraBtn = document.querySelector('#face-camera-button');
