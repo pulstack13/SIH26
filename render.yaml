@@ -1,0 +1,12 @@
+# Render blueprint for GARUDA-ID API (+ serves frontend at /).
+# Dashboard → New → Blueprint → select repo → Apply.
+# NOTE: Windows OCR / Hardhat chain don't exist on Render, so MRZ OCR and
+# on-chain audit gracefully degrade; quality / tampering / face / watchlist work.
+services:
+  - type: web
+    name: garuda-id-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    healthCheckPath: /health

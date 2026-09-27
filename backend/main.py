@@ -5,6 +5,7 @@ from uuid import uuid4
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -32,6 +33,14 @@ MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 ALLOWED_MEDIA_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
 app = FastAPI(title="GARUDA-ID API", version="0.1.0")
+# Split hosting (e.g. frontend on Netlify, API on Render) needs CORS.
+# Prototype allows all origins; restrict ALLOWED_ORIGINS in production.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class AuditRequest(BaseModel):

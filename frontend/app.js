@@ -25,6 +25,19 @@ const dropzoneSub = document.querySelector('#dropzone-sub');
 const helperDoctype = document.querySelector('#helper-doctype');
 const fieldsTitle = document.querySelector('#fields-title');
 
+// Split hosting: same-origin by default. For Netlify frontend + Render API,
+// set window.GARUDA_API_BASE="https://<your-api>.onrender.com" in index.html
+// or open the site as https://<site>.netlify.app/?api=https://<your-api>.onrender.com
+const API_BASE = (() => {
+  try {
+    const q = new URLSearchParams(location.search).get('api');
+    const base = (q || window.GARUDA_API_BASE || '').trim().replace(/\/$/, '');
+    if (base) localStorage.setItem('garuda_api_base', base);
+    return base || localStorage.getItem('garuda_api_base') || '';
+  } catch { return (window.GARUDA_API_BASE || '').trim().replace(/\/$/, ''); }
+})();
+const api = (path) => `${API_BASE}${path}`;
+
 let selectedFile = null;
 let currentAnalysis = null;
 let selectedDocType = 'passport';
@@ -118,7 +131,7 @@ if (docTypePicker) {
 
 async function refreshBlockchainStatus() {
   try {
-    const response = await fetch('/api/blockchain-status');
+    const response = await fetch(api('/api/blockchain-status'));
     const status = await response.json();
     blockchainStatus.classList.toggle('offline', !status.connected || !status.contract_deployed);
     blockchainStatus.querySelector('b').textContent = status.connected && status.contract_deployed
@@ -133,7 +146,7 @@ async function refreshBlockchainStatus() {
 refreshBlockchainStatus();
 async function refreshWatchlistStatus() {
   try {
-    const res = await fetch('/api/watchlist-status');
+    const res = await fetch(api('/api/watchlist-status'));
     const data = await res.json();
     const el = document.querySelector('#watchlist-status');
     if (el) el.textContent = `Watchlist DB: ${data.entries || 0} demo entries loaded (${data.seen_ids || 0} IDs seen this session). Edit backend/data/watchlist.json to update. Test blacklist with Aadhaar 2000 0041 3739.`;
@@ -228,7 +241,7 @@ async function runAnalysis(file) {
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), 90000);
   try {
-    const response = await fetch('/api/analyze-document', {
+    const response = await fetch(api('/api/analyze-document'), {
       method: 'POST', body: formData, signal: controller.signal
     });
     if (!response.ok) {
@@ -300,7 +313,7 @@ auditButton.addEventListener('click', async () => {
   auditButton.textContent = 'Recording audit proof…';
   setAuditStatus('Creating a privacy-safe evidence hash…');
   try {
-    const response = await fetch('/api/record-audit', {
+    const response = await fetch(api('/api/record-audit'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -386,7 +399,7 @@ if (faceVerifyButton) faceVerifyButton.addEventListener('click', async () => {
     const fd = new FormData();
     fd.append('id_image', faceIdFile);
     fd.append('selfie', faceSelfieFile);
-    const res = await fetch('/api/verify-face', { method: 'POST', body: fd });
+    const res = await fetch(api('/api/verify-face'), { method: 'POST', body: fd });
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || 'Face verification failed.');
     document.querySelector('#face-results').hidden = false;
@@ -469,7 +482,7 @@ if (langBtn) langBtn.addEventListener('click', () => {
 // ---- Face engine status + camera capture ----
 async function refreshFaceStatus() {
   try {
-    const res = await fetch('/api/face-status');
+    const res = await fetch(api('/api/face-status'));
     const data = await res.json();
     const el = document.querySelector('#face-engine-status');
     if (el) el.textContent = `Face engines: matcher ${data.active_matcher}, detector ${data.active_detector}. ${data.note || ''}`;
