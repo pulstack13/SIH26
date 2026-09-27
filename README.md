@@ -1,6 +1,6 @@
-# GARUDA-ID — AI-Based Fake Identity & Document Screening (SIH26188)
+# GARUDA-ID — AI-Based Fake Identity & Document Screening (SIH26194)
 
-**SIH 2026 · Problem Statement SIH26188** · Ministry of Home Affairs — Sashastra Seema Bal (SSB), Police-II Division.
+**SIH 2026 · Problem Statement SIH26194 — Student Innovation** · AICTE, MIC-Student Innovation · Theme: Blockchain & Cybersecurity.
 
 | | |
 |---|---|
@@ -15,7 +15,7 @@ Video-demo flow: **select document type → upload image → VERIFY → READY / 
 
 Only the report ID, quality-check results, timestamp, status, and a SHA-256 evidence hash are written to the chain. Uploaded images and personal data are never written to blockchain or retained by the API.
 
-## SIH26188 module mapping
+## SIH26194 module mapping
 
 | SIH module | Status in this prototype |
 |---|---|

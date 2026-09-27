@@ -1,4 +1,4 @@
-"""Tampering screening (SIH26188 Module 3) — lightweight, dependency-free.
+"""Tampering screening (SIH26194 Module 3) — lightweight, dependency-free.
 
 Methods (all local, numpy + Pillow only):
 1. ELA-style recompression diff — spliced/pasted regions recompress differently.

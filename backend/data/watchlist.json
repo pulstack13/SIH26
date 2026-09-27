@@ -1,5 +1,5 @@
 {
-  "_note": "DEMO ONLY — synthetic SSB watchlist for SIH26188 prototype. Replace with real SSB/IB database via API in production. Edit this file without restarting the API; it reloads per request.",
+  "_note": "DEMO ONLY — synthetic watchlist for SIH26194 prototype. Replace with the real authority database via API in production. Edit this file without restarting the API; it reloads per request.",
   "blacklisted_passports": ["Z99999999", "X00000000"],
   "blacklisted_aadhaar": ["200000413739"],
   "blacklisted_pan": ["BNZPM2506F"],

@@ -1,4 +1,4 @@
-"""India document validators for SIH26188 Module 1 (OCR extract) + Module 2 (validation).
+"""India document validators for SIH26194 Module 1 (OCR extract) + Module 2 (validation).
 
 Sources (public documentation, no DB lookup in prototype):
 - Passport: ICAO Doc 9303 TD3 (already in mrz.py) — 2x44 chars, 7-3-1 check digits.

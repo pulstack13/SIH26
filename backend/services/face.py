@@ -1,4 +1,4 @@
-"""Face verification + passive liveness + morph screening (SIH26188 Module 4).
+"""Face verification + passive liveness + morph screening (SIH26194 Module 4).
 
 Strategy for an offline prototype without GPU downloads:
 - If `retinaface` is installed, use it for detection; elif `cv2` Haar cascade

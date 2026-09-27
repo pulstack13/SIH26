@@ -1,6 +1,6 @@
-"""Local watchlist / blacklist + expired + duplicate-identity checks (SIH26188).
+"""Local watchlist / blacklist + expired + duplicate-identity checks (SIH26194).
 
-Prototype stands in for the SSB/IB database lookup:
+Prototype stands in for the authority database lookup:
 - `backend/data/watchlist.json` — demo blacklist + expired IDs. Reloaded on
   every request so officers can edit it without restarting the API.
 - `backend/data/seen_ids.json` — auto-created log of previously verified IDs
