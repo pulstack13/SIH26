@@ -27,3 +27,6 @@ blockchain/.hardhat-runtime/
 *.log
 .DS_Store
 Thumbs.db
+
+# Local demo runtime state (seen IDs log). Keep the demo watchlist itself.
+backend/data/seen_ids.json

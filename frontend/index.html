@@ -3,152 +3,224 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="GARUDA-ID document screening prototype" />
-    <title>GARUDA-ID | Screening Console</title>
+    <meta name="description" content="GARUDA-ID — SIH26188 document verification prototype for SSB: Passport, Visa, National ID, Driving Licence, Permit" />
+    <title>GARUDA-ID | Document Verification — SSB (SIH26188)</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=4" />
+    <link rel="stylesheet" href="styles.css?v=10" />
   </head>
   <body>
-    <div class="notice-bar">Privacy-first document screening · Local prototype · No images stored on-chain</div>
-    <header class="topbar">
-      <a class="brand" href="#top" aria-label="GARUDA-ID home">
-        <span class="brand-mark">G</span>
-        <span>GARUDA-ID <small>TRUSTED DOCUMENT SCREENING</small></span>
-      </a>
-      <nav class="topnav" aria-label="Page sections">
-        <a href="#capture">Capture</a>
-        <a href="#evidence">Evidence</a>
-        <a href="#audit">Audit proof</a>
-      </nav>
-      <a class="environment" id="blockchain-status" href="/api/blockchain-status" target="_blank" rel="noreferrer"><span></span><b>Checking local chain…</b></a>
+    <div class="tricolour" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="gov-strip">
+      <span>भारत सरकार | Government of India &nbsp;·&nbsp; Ministry of Home Affairs</span>
+      <span class="gov-strip-right"><a href="#main">Skip to Main Content</a> &nbsp;|&nbsp; A- A A+ &nbsp;|&nbsp; <button id="lang-toggle" class="lang-btn" type="button">हिन्दी</button></span>
+    </div>
+
+    <header class="gov-header">
+      <div class="emblem" aria-hidden="true">☸</div>
+      <div class="gov-titles">
+        <strong>Sashastra Seema Bal (SSB) · Police-II Division</strong>
+        <h1>GARUDA-ID — Fake Identity &amp; Document Screening</h1>
+        <span>SIH26188 · Prototype for border-checkpoint screening · Passport / Visa / National ID / Driving Licence / Permit</span>
+      </div>
+      <div class="gov-side">
+        <span class="sih-badge">SIH 2026<br />Prototype</span>
+        <a class="chain-box" id="blockchain-status" href="/api/blockchain-status" target="_blank" rel="noreferrer"><span></span><b>Checking local chain…</b></a>
+      </div>
     </header>
 
-    <main id="top" class="shell">
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Officer screening workspace</p>
-          <h1>Clear captures.<br /><em>Confident review.</em></h1>
-          <p>Check document quality, validate passport MRZ data, and create a privacy-safe blockchain audit proof in one focused flow.</p>
-          <div class="assurance-row" aria-label="System capabilities">
-            <span><b>01</b> Quality gate</span>
-            <span><b>02</b> MRZ checks</span>
-            <span><b>03</b> Audit proof</span>
-          </div>
+    <nav class="gov-nav" aria-label="Primary">
+      <a href="#capture" class="active" data-i18n="nav_verify">Document Verification</a>
+      <a href="#face" data-i18n="nav_face">Face Match</a>
+      <a href="#evidence" data-i18n="nav_report">Verification Report</a>
+      <a href="#history" data-i18n="nav_history">History</a>
+      <a href="#audit" data-i18n="nav_audit">Audit Trail</a>
+      <a href="#guidelines" data-i18n="nav_guide">Guidelines</a>
+    </nav>
+
+    <main id="main" class="shell">
+      <p class="breadcrumb" data-i18n="crumb">Home / Document Verification</p>
+      <div class="page-head">
+        <div>
+          <h2 data-i18n="page_title">Document Verification Form</h2>
+          <p data-i18n="page_sub">Step 1: select document type. Step 2: upload image. Step 3: verify report. Use synthetic or authorized test documents only.</p>
         </div>
-        <aside class="hero-note">
-          <span class="note-mark">✓</span>
-          <div><strong>Two clear outcomes</strong><p>Every scan resolves to READY or RECAPTURE—nothing ambiguous.</p></div>
-        </aside>
-      </section>
+        <span id="risk-badge" class="risk-badge neutral">Awaiting scan</span>
+      </div>
 
-      <section class="section-heading">
-        <div><p class="eyebrow">Screening workflow</p><h2>Review a document capture</h2></div>
-        <p>Use a clear, evenly lit image of the passport biodata page with both MRZ lines visible.</p>
-      </section>
+      <div class="notice-box">
+        <strong>Privacy notice:</strong> images and personal data are never written to blockchain and are not retained by the API.
+        Only report ID, checks, timestamp, status and SHA-256 evidence hash are recorded.
+      </div>
 
-      <section class="workspace" aria-label="Document analysis workspace">
-        <div class="card upload-card" id="capture">
-          <div class="card-heading">
-            <div>
-              <p class="eyebrow">Step 01</p>
-              <h2>Capture document</h2>
-            </div>
-            <span class="status-chip">Input</span>
+      <section class="workspace" aria-label="Document verification workspace">
+        <div class="card" id="capture">
+          <h3 class="card-title"><span data-i18n="form_a">A. Applicant Document Details</span> <span class="form-no">Form GARUDA-01</span></h3>
+
+          <label class="field-label"><span data-i18n="doctype_label">1. Document type</span> <span class="req">*</span> <span class="status-chip" id="doctype-chip">Passport</span></label>
+          <div class="doc-type-picker" id="doc-type-picker" role="radiogroup" aria-label="Document type">
+            <button type="button" data-doctype="passport" class="active">Passport<small>ICAO 9303 · Full</small></button>
+            <button type="button" data-doctype="visa">Visa<small>Structural</small></button>
+            <button type="button" data-doctype="national_id">National ID<small>Aadhaar/PAN/EPIC</small></button>
+            <button type="button" data-doctype="driving_licence">Driving Licence<small>Parivahan</small></button>
+            <button type="button" data-doctype="permit">Permit<small>Structural</small></button>
           </div>
+          <p id="doctype-notice" class="doctype-notice">Passport selected — full TD3 MRZ validation (ICAO 9303).</p>
 
+          <label class="field-label"><span data-i18n="upload_label">2. Upload document image</span> <span class="req">*</span></label>
           <label class="dropzone" id="dropzone" for="file-input">
             <input id="file-input" type="file" accept="image/png,image/jpeg,image/webp" hidden />
-            <span class="upload-icon">↥</span>
-            <strong>Add passport biodata page</strong>
-            <span>Drop here or browse · PNG, JPG, WEBP · max 10 MB</span>
+            <strong id="dropzone-title">Add passport biodata page</strong>
+            <span id="dropzone-sub">PNG / JPG / WEBP · Max 10 MB · Click to browse or drag &amp; drop</span>
           </label>
 
           <div class="demo-picker" id="demo-picker">
-            <span>Demo inputs</span>
-            <button type="button" data-demo="demo-assets/clear-ready.png">Clear → READY</button>
-            <button type="button" data-demo="demo-assets/blurred-dark-recapture.jpg">Blurry/dark → RECAPTURE</button>
+            <span id="demo-label">Sample images for this document type:</span>
+            <button type="button" data-demo="demo-assets/clear-ready.png" data-doctype="passport">Passport — Clear → READY</button>
+            <button type="button" data-demo="demo-assets/blurred-dark-recapture.jpg" data-doctype="passport">Passport — Blurry → RECAPTURE</button>
+            <button type="button" data-demo="demo-assets/tampered-edited.jpg" data-doctype="passport">Passport — Edited → TAMPER FLAG</button>
+            <button type="button" data-demo="demo-assets/visa-sample.png" data-doctype="visa">Visa — Sample → READY</button>
+            <button type="button" data-demo="demo-assets/aadhaar-sample.png" data-doctype="national_id">National ID — Aadhaar sample → READY</button>
+            <button type="button" data-demo="demo-assets/dl-sample.png" data-doctype="driving_licence">Licence — Sample → READY</button>
+            <button type="button" data-demo="demo-assets/permit-sample.png" data-doctype="permit">Permit — Sample → READY</button>
           </div>
 
           <div class="preview-wrap" id="preview-wrap" hidden>
             <img id="document-preview" alt="Uploaded document preview" />
-            <button id="remove-file" class="text-button" type="button">Choose a different image</button>
+            <button id="remove-file" class="text-button" type="button">Remove and choose another image</button>
           </div>
 
-          <button id="analyze-button" class="primary-button" type="button" disabled>
-            Analyze document <span>→</span>
-          </button>
+          <button id="analyze-button" class="primary-button" type="button" disabled data-i18n="verify_btn">Verify Document</button>
           <p id="analysis-status" class="analysis-status" role="status" hidden></p>
-          <p class="helper-text"><span>ⓘ</span> Use only synthetic or authorized test documents in this prototype.</p>
+          <p class="helper-text">ⓘ <span id="helper-doctype">Passport: ICAO 9303 MRZ checks.</span> Synthetic / authorized test documents only.</p>
+
+          <div class="doc-table-wrap" id="guidelines">
+            <h4>Supported documents and checks (as per public specs)</h4>
+            <p class="helper-text" id="watchlist-status">Watchlist DB: checking…</p>
+            <table class="gov-table">
+              <tr><th>Document</th><th>Spec</th><th>Checks in prototype</th></tr>
+              <tr id="guide-passport"><td>Passport</td><td>ICAO Doc 9303 TD3</td><td>2×44 MRZ, 7-3-1 check digits, DOB/expiry</td></tr>
+              <tr id="guide-visa"><td>Visa</td><td>Structural</td><td>Number, type, stay, issue &lt; expiry</td></tr>
+              <tr id="guide-national_id"><td>National ID</td><td>UIDAI / ITD / ECI</td><td>Aadhaar Verhoeff + PAN holder-type + EPIC format</td></tr>
+              <tr id="guide-driving_licence"><td>Driving Licence</td><td>Parivahan SS-RR-YYYY-NNNNNNN</td><td>State/RTO/year/serial, expiry</td></tr>
+              <tr id="guide-permit"><td>Permit</td><td>Structural</td><td>Number, issue &lt; expiry</td></tr>
+            </table>
+          </div>
         </div>
 
-        <div class="card analysis-card" id="evidence" aria-live="polite">
-          <div class="card-heading">
-            <div>
-              <p class="eyebrow">Step 02</p>
-              <h2>Evidence report</h2>
-            </div>
-            <span id="risk-badge" class="risk-badge neutral">Awaiting scan</span>
-          </div>
+        <div class="card" id="evidence" aria-live="polite">
+          <h3 class="card-title"><span data-i18n="form_b">B. Verification Report</span> <span class="form-no">Form GARUDA-02</span></h3>
 
           <div id="empty-state" class="empty-state">
-            <span class="empty-icon">◎</span>
-            <strong>Evidence report awaiting capture</strong>
-            <p>Quality, MRZ, and decision details will appear here after analysis.</p>
+            <strong>No report yet</strong>
+            <p id="empty-text">Select Passport, upload its image and click Verify. Decision (READY / RECAPTURE), score and checks will appear here.</p>
           </div>
 
           <div id="results" hidden>
-            <div class="score-panel">
-              <div>
-                <span class="label">Capture decision</span>
-                <strong id="risk-score">--</strong>
-              </div>
-              <p id="risk-summary">No evidence processed yet.</p>
-              <div class="validation-score">
-                <div><span class="label">Validation score</span><strong id="validation-score">--</strong><small>/100</small></div>
-                <div class="score-track" role="progressbar" aria-label="Validation score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="score-fill"></span></div>
-              </div>
-            </div>
+            <table class="gov-table result-table">
+              <tr><th>Decision</th><td><strong id="risk-score">--</strong></td></tr>
+              <tr><th>Validation score</th><td><strong id="validation-score">--</strong> /100 <div class="score-track" role="progressbar" aria-label="Validation score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="score-fill"></span></div></td></tr>
+            </table>
+            <p id="risk-summary" class="summary"></p>
 
-            <div class="results-grid">
-              <section>
-                <h3>Document fields</h3>
-                <dl id="document-fields" class="field-list"></dl>
-              </section>
-              <section>
-                <h3>Validation checks</h3>
-                <ul id="validation-list" class="check-list"></ul>
-              </section>
-            </div>
+            <h4 id="fields-title">Extracted fields</h4>
+            <dl id="document-fields" class="field-list"></dl>
 
-            <section class="reasons-section">
-              <h3>Reasons & evidence</h3>
-              <ul id="reason-list" class="reason-list"></ul>
+            <h4>Validation checks</h4>
+            <ul id="validation-list" class="check-list"></ul>
+
+            <h4>Reasons / remarks</h4>
+            <ul id="reason-list" class="reason-list"></ul>
+
+            <section id="tamper-section" hidden>
+              <h4>Tampering screening (ELA + noise + metadata)</h4>
+              <table class="gov-table">
+                <tr><th>Tamper score</th><td><strong id="tamper-score">--</strong> /100</td></tr>
+                <tr><th>Verdict</th><td id="tamper-verdict">--</td></tr>
+              </table>
+              <ul id="tamper-list" class="check-list"></ul>
+              <img id="tamper-heatmap" alt="Tampering heatmap — bright areas recompressed differently" />
+              <p class="helper-text">Heatmap: bright red = recompression mismatch (possible splice/edit). Review original image alongside.</p>
             </section>
 
             <section id="recapture-prompt" class="recapture-prompt" hidden>
-              <div>
-                <span class="recapture-kicker">New capture required</span>
-                <h3>This image needs another try.</h3>
-                <p id="recapture-copy">Use brighter light, hold the camera steady, and keep the entire biodata page in frame.</p>
-              </div>
-              <button id="recapture-button" type="button">Choose another image <span>→</span></button>
+              <strong>Recapture required.</strong>
+              <p id="recapture-copy">Use brighter light, hold the camera steady, keep the document fully in frame.</p>
+              <button id="recapture-button" type="button">Choose another image</button>
             </section>
 
             <section class="audit-section" id="audit">
-              <div>
-                <h3>Blockchain audit proof</h3>
-                <p>Records only the report hash, status, and timestamp - never the uploaded image.</p>
-              </div>
-              <button id="audit-button" class="audit-button" type="button">Record audit proof</button>
+              <h4>Blockchain audit trail (local)</h4>
+              <p>Stores only report hash + status + timestamp. No image stored on-chain.</p>
+              <button id="audit-button" class="audit-button" type="button">Record Audit Proof</button>
               <p id="audit-status" class="audit-status" role="status" hidden></p>
               <dl id="audit-proof" class="audit-proof" hidden></dl>
             </section>
           </div>
         </div>
       </section>
+
+      <section class="workspace" style="margin-top:12px" aria-label="Face and history">
+        <div class="card" id="face">
+          <h3 class="card-title"><span data-i18n="form_c">C. Face Match + Liveness</span> <span class="form-no">Form GARUDA-03</span></h3>
+          <p class="helper-text" id="face-engine-status">Face engines: checking…</p>
+          <label class="field-label">Step 1 — ID portrait (auto-linked from above)</label>
+          <p class="helper-text">Upar document upload karte hi wahi image yahan ID portrait ban jati hai — dobara upload nahi.</p>
+          <div class="demo-picker">
+            <button id="face-use-doc-button" type="button">Re-link uploaded document</button>
+          </div>
+          <p class="helper-text">Alag portrait ho to:</p>
+          <input id="face-id-input" type="file" accept="image/png,image/jpeg,image/webp" />
+          <label class="field-label">Step 2 — Live selfie (camera only) <span class="req">*</span></label>
+          <div class="demo-picker">
+            <button id="face-camera-button" type="button">Open live camera</button>
+            <button id="face-capture-button" type="button" hidden>Capture photo</button>
+          </div>
+          <video id="face-video" autoplay playsinline hidden></video>
+          <div class="preview-row">
+            <img id="face-id-preview" alt="ID portrait preview" hidden />
+            <img id="face-selfie-preview" alt="Selfie preview" hidden />
+          </div>
+          <label class="field-label">Step 3 — Match + liveness result</label>
+          <button id="face-verify-button" class="primary-button" type="button" data-i18n="face_btn">Verify Face</button>
+          <p id="face-status" class="analysis-status" role="status" hidden></p>
+          <div id="face-results" hidden>
+            <table class="gov-table">
+              <tr><th>Match</th><td id="face-match">--</td></tr>
+              <tr><th>Match score</th><td id="face-score">--</td></tr>
+              <tr><th>Engine</th><td id="face-engine">--</td></tr>
+              <tr><th>Liveness</th><td id="face-liveness">--</td></tr>
+              <tr><th>Morph risk</th><td id="face-morph">--</td></tr>
+            </table>
+            <ul id="face-list" class="check-list"></ul>
+          </div>
+        </div>
+
+        <div class="card" id="history">
+          <h3 class="card-title"><span data-i18n="form_d">D. Verification History</span> <span class="form-no">Local</span></h3>
+          <p class="helper-text">Stored in this browser only (localStorage). No images stored — report IDs + decisions.</p>
+          <table class="gov-table">
+            <tr><th>Total</th><td id="hist-total">0</td></tr>
+            <tr><th>READY</th><td id="hist-ready">0</td></tr>
+            <tr><th>RECAPTURE</th><td id="hist-recapture">0</td></tr>
+          </table>
+          <div class="table-scroll">
+            <table class="gov-table" id="hist-table">
+              <tr><th>Time</th><th>Type</th><th>Report</th><th>Decision</th><th>Score</th></tr>
+            </table>
+          </div>
+          <button id="hist-clear" class="audit-button" type="button">Clear History</button>
+        </div>
+      </section>
     </main>
 
-    <footer>GARUDA-ID prototype · Capture-quality gate only · Officer review remains required for every decision.</footer>
-    <script src="app.js"></script>
+    <footer class="gov-footer">
+      <div class="foot-cols">
+        <div><strong>About</strong><p>GARUDA-ID SIH26188 screening prototype for SSB. Officer review mandatory for every decision.</p></div>
+        <div><strong>Organisation</strong><p>Ministry of Home Affairs<br />Sashastra Seema Bal, Police-II Division</p></div>
+        <div><strong>Help</strong><p>Use clear, evenly lit images. Passport needs both 44-char MRZ lines visible.</p></div>
+      </div>
+      <div class="foot-base">Content owned by SSB (demo) · Prototype only — not for production use · No images retained</div>
+    </footer>
+    <script src="app.js?v=13"></script>
   </body>
 </html>
