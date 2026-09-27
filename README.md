@@ -2,6 +2,17 @@
 
 **SIH 2026 · Problem Statement SIH26194 — Student Innovation** · AICTE, MIC-Student Innovation · Theme: Blockchain & Cybersecurity.
 
+Official PS details (sih.gov.in):
+
+| Field | Value |
+|---|---|
+| Problem Statement ID | 26194 |
+| Title | Student Innovation — Provide ideas in a decentralized and distributed ledger technology used to store digital information that powers cryptocurrencies and NFTs and can radically change multiple sectors |
+| Organization | AICTE |
+| Department | AICTE, MIC-Student Innovation |
+| Category | Software |
+| Theme | Blockchain & Cybersecurity |
+
 | | |
 |---|---|
 | 🌐 **Live demo (frontend)** | https://garudaid.netlify.app/ |
